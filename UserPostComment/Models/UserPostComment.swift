@@ -17,7 +17,7 @@ class UserPostComment: NSObject {
     var delegate: UserPostCommentDelegate!
     
     func getUserFromApi() {
-        TaskConfig.sharedInstance().getUserData({ (results, error) in
+        TaskConfig().getUserData({ (results, error) in
             if results == nil {
                 self.delegate.apiError()
             }
@@ -28,7 +28,7 @@ class UserPostComment: NSObject {
         })
     }
     func getPostFromApi() {
-        TaskConfig.sharedInstance().getPostData({ (results, error) in
+        TaskConfig().getPostData({ (results, error) in
             if results == nil {
                 self.delegate.apiError()
             }
@@ -39,7 +39,7 @@ class UserPostComment: NSObject {
         })
     }
     func getCommentFromApi() {
-        TaskConfig.sharedInstance().getCommentData({ (results, error) in
+        TaskConfig().getCommentData({ (results, error) in
             if results == nil {
                 self.delegate.apiError()
             }

@@ -103,34 +103,31 @@ extension PostViewController {
     }
 }
 // MARK: - UITableViewDataSource, UITableViewDelegate
-extension PostViewController: UITableViewDataSource, UITableViewDelegate {
+extension PostViewController: UITableViewDataSource {
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
-    }
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return UITableViewAutomaticDimension
     }
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return tableData.count == 0 ? 1 : tableData.count
     }
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .Default, reuseIdentifier: Identifier.TableView.Cell)
-        cell.imageView!.image = userImage()
+        cell.imageView?.image = userImage()
         cell.imageView?.tintColor = UIColor.colorFromHexRGB(Color.SlateGray)
         if tableData.count > 0 {
             let list = tableData[indexPath.row] as! PostList
             if let imageUrl = list.imageUrl {
                 if isNetworkOrCellularCoverageReachable() {
-                    TaskConfig.sharedInstance().taskForGETImage(imageUrl, completionHandler: { (imageData, error) in
+                    TaskConfig().taskForGETImage(imageUrl, completionHandler: { (imageData, error) in
                         if let image = UIImage(data: imageData!) {
                             dispatch_async(dispatch_get_main_queue(), {
-                                cell.imageView!.image = image
+                                cell.imageView?.image = image
                                 let transition = CATransition()
                                 transition.duration = 1.0
                                 transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
                                 transition.type = kCATransitionFade
                                 transition.delegate = self
-                                cell.imageView!.layer.addAnimation(transition, forKey: nil)
+                                cell.imageView?.layer.addAnimation(transition, forKey: nil)
                             })
                         }
                         else {
@@ -156,6 +153,12 @@ extension PostViewController: UITableViewDataSource, UITableViewDelegate {
             cell.selectionStyle = .None
         }
         return cell
+    }
+}
+// MRK:: - UITableViewDelegate
+extension PostViewController: UITableViewDelegate {
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return UITableViewAutomaticDimension
     }
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)

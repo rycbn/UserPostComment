@@ -35,7 +35,6 @@ class PostDetailViewController: UIViewController {
         scrollView.contentSize = CGSizeMake(scrollView.bounds.size.width, totalHeight)
         scrollView.layoutIfNeeded()
         scrollView.setNeedsDisplay()
-        scrollView.setNeedsLayout()
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -87,7 +86,7 @@ extension PostDetailViewController {
         
         if isNetworkOrCellularCoverageReachable() {
             if let imageUrl = postlist.imageUrl {
-                TaskConfig.sharedInstance().taskForGETImage(imageUrl, completionHandler: { (imageData, error) in
+                TaskConfig().taskForGETImage(imageUrl, completionHandler: { (imageData, error) in
                     if let image = UIImage(data: imageData!) {
                         dispatch_async(dispatch_get_main_queue(), {
                             imageView.image = image
@@ -257,16 +256,19 @@ extension PostDetailViewController {
         presentViewController(presentVC, animated: true, completion: nil)
     }
 }
+// MARK:- CommentViewControllerDelegate
 extension PostDetailViewController: CommentViewControllerDelegate {
     func removeBackgroundView() {
         parentViewController!.view.alpha = 1.0
     }
 }
+// MARK:- UIViewControllerTransitioningDelegate
 extension PostDetailViewController: UIViewControllerTransitioningDelegate {
     func presentationControllerForPresentedViewController(presented: UIViewController, presentingViewController presenting: UIViewController, sourceViewController source: UIViewController) -> UIPresentationController? {
         return CenterPresentationController(presentedViewController: presented, presentingViewController: presenting)
     }
 }
+// MARK:- UIPresentationController
 class CenterPresentationController : UIPresentationController {
     override func frameOfPresentedViewInContainerView() -> CGRect {
         let rect = CGRect(x: 0, y: containerView!.bounds.height/2, width: containerView!.bounds.width, height: containerView!.bounds.height/2)

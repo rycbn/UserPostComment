@@ -24,7 +24,6 @@ class CommentViewController: UIViewController {
         configureTopView()
         configureTableView()
     }
-
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
@@ -92,43 +91,40 @@ extension CommentViewController {
         bottomLayoutGuide.topAnchor.constraintEqualToAnchor(tableView.bottomAnchor).active = true
     }
 }
-// MARK:- Internal Button
+// MARK:- Internal Action
 extension CommentViewController {
     func dismiss(sender: UIButton) {
         delegate.removeBackgroundView()
         dismissViewControllerAnimated(true, completion: nil)
     }
 }
-// MARK:- UITableViewDataSource, UITableViewDelegate
-extension CommentViewController: UITableViewDataSource, UITableViewDelegate {
+// MARK:- UITableViewDataSource
+extension CommentViewController: UITableViewDataSource {
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
-    }
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return UITableViewAutomaticDimension
     }
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return tableData.count
     }
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .Default, reuseIdentifier: Identifier.TableView.Cell)
-        cell.imageView!.image = userImage()
+        cell.imageView?.image = userImage()
         cell.imageView?.tintColor = UIColor.colorFromHexRGB(Color.SlateGray)
         if isNetworkOrCellularCoverageReachable() {
             let list = tableData[indexPath.row]
             let username = list.email?.componentsSeparatedByString("@").first
             let imageUrl = String(format: "https://api.adorable.io/avatars/40/%@@adorable.png", username!)
             if isNetworkOrCellularCoverageReachable() {
-                TaskConfig.sharedInstance().taskForGETImage(imageUrl, completionHandler: { (imageData, error) in
+                TaskConfig().taskForGETImage(imageUrl, completionHandler: { (imageData, error) in
                     if let image = UIImage(data: imageData!) {
                         dispatch_async(dispatch_get_main_queue(), {
-                            cell.imageView!.image = image
+                            cell.imageView?.image = image
                             let transition = CATransition()
                             transition.duration = 1.0
                             transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
                             transition.type = kCATransitionFade
                             transition.delegate = self
-                            cell.imageView!.layer.addAnimation(transition, forKey: nil)
+                            cell.imageView?.layer.addAnimation(transition, forKey: nil)
                         })
                     }
                     else {
@@ -153,5 +149,11 @@ extension CommentViewController: UITableViewDataSource, UITableViewDelegate {
             cell.selectionStyle = .None
         }
         return cell
+    }
+}
+// MARK:- UITableViewDelegate
+extension CommentViewController: UITableViewDelegate {
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return UITableViewAutomaticDimension
     }
 }

@@ -11,7 +11,6 @@ import MapKit
 import CoreLocation
 
 class UserViewController: UIViewController {
-
     // MARK:- Properties
     var scrollView: UIScrollView!
     var topView: UIView!
@@ -43,12 +42,11 @@ class UserViewController: UIViewController {
         configureContactHeader()
         configureContactView()
     }
-    override func viewWillLayoutSubviews() {
+    override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         scrollView.contentSize = CGSizeMake(scrollView.bounds.size.width, totalHeight)
         scrollView.layoutIfNeeded()
         scrollView.setNeedsDisplay()
-        scrollView.setNeedsLayout()
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -107,7 +105,7 @@ extension UserViewController {
         topView.addSubview(imageView)
         let imageUrl = String(format: "https://api.adorable.io/avatars/40/%@@adorable.png", userInfo.username!)
         if isNetworkOrCellularCoverageReachable() {
-            TaskConfig.sharedInstance().taskForGETImage(imageUrl, completionHandler: { (imageData, error) in
+            TaskConfig().taskForGETImage(imageUrl, completionHandler: { (imageData, error) in
                 if let image = UIImage(data: imageData!) {
                     dispatch_async(dispatch_get_main_queue(), {
                         imageView.image = image
@@ -164,7 +162,7 @@ extension UserViewController {
         addressHeaderLabel.topAnchor.constraintEqualToAnchor(topView.bottomAnchor, constant: 20).active = true
         addressHeaderLabel.heightAnchor.constraintEqualToConstant(15).active = true
         
-        totalHeight = totalHeight + 15
+        totalHeight = totalHeight + 15 + 20
     }
     func configureMapView() {
         mapView = MKMapView()
@@ -183,7 +181,7 @@ extension UserViewController {
         mapView.widthAnchor.constraintEqualToAnchor(scrollView.widthAnchor).active = true
         mapView.heightAnchor.constraintEqualToConstant(100).active = true
         
-        totalHeight = totalHeight + 100
+        totalHeight = totalHeight + 100 + 5
     }
     func configureAddressView() {
         addressView = UIView()
@@ -277,7 +275,7 @@ extension UserViewController {
         companyHeaderLabel.heightAnchor.constraintEqualToConstant(15).active = true
         scrollView.trailingAnchor.constraintEqualToAnchor(companyHeaderLabel.trailingAnchor, constant: 20).active = true
         
-        totalHeight = totalHeight + 15
+        totalHeight = totalHeight + 15 + 20
     }
     func configureCompanyView() {
         companyView = UIView()
@@ -340,7 +338,7 @@ extension UserViewController {
         companyView.widthAnchor.constraintEqualToAnchor(scrollView.widthAnchor).active = true
         companyView.heightAnchor.constraintEqualToConstant(companyViewHeight).active = true
         
-        totalHeight = totalHeight + companyViewHeight
+        totalHeight = totalHeight + companyViewHeight + 5
     }
     func configureContactHeader() {
         contactHeaderLabel = UILabel()
@@ -471,8 +469,9 @@ extension UserViewController {
         contactView.topAnchor.constraintEqualToAnchor(contactHeaderLabel.bottomAnchor, constant: 5).active = true
         contactView.widthAnchor.constraintEqualToAnchor(scrollView.widthAnchor).active = true
         contactView.heightAnchor.constraintEqualToConstant(contactViewHeight).active = true
-
+        //print(contactViewHeight)
         totalHeight = totalHeight + contactViewHeight + 5
+        //print(totalHeight)
     }
 }
 // MARK:- Internal Action
@@ -481,7 +480,7 @@ extension UserViewController {
         navigationController?.popViewControllerAnimated(true)
     }
 }
-// MARK: CLLocationManagerDelegate
+// MARK:- CLLocationManagerDelegate
 extension UserViewController: CLLocationManagerDelegate {
     func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
         if status == .AuthorizedWhenInUse {
@@ -498,7 +497,7 @@ extension UserViewController: CLLocationManagerDelegate {
         print("Location Manager failed with the following error: \(error)")
     }
 }
-// MARK: MKMapViewDelegate
+// MARK:- MKMapViewDelegate
 extension UserViewController: MKMapViewDelegate {
     /*
     func mapView(mapView: MKMapView, didUpdateUserLocation userLocation: MKUserLocation) {
