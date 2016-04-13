@@ -68,8 +68,8 @@ extension PostViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.exclusiveTouch = true
-        tableView.tableFooterView = UIView(frame: CGRectZero)
         tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.tableFooterView = UIView(frame: CGRectZero)
         tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier:Identifier.TableView.Cell)
         view.addSubview(tableView)
         
