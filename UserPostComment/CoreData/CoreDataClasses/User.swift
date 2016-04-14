@@ -59,6 +59,6 @@ class User: NSManagedObject {
             item.address = address
             item.company = company
         }
-        appDelegate().coreDataStack.saveContext()
+        objSaveContext()
     }
 }

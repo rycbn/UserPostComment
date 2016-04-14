@@ -27,7 +27,7 @@ class Comment: NSManagedObject {
             item.email = comment[JsonResponseKeys.Email] as? String
             item.body = comment[JsonResponseKeys.Body] as? String
         }
-        appDelegate().coreDataStack.saveContext()
+        objSaveContext()
         NSNotificationCenter.defaultCenter().postNotificationName(Notification.InsertCompleted, object: self)
     }
 }

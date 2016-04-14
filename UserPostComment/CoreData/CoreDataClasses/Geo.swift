@@ -16,6 +16,6 @@ class Geo: NSManagedObject {
         let item = Geo(entity: entity!, insertIntoManagedObjectContext: context)
         item.latitude = geo[JsonResponseKeys.Lat] as? String
         item.longitude = geo[JsonResponseKeys.Lng] as? String
-        appDelegate().coreDataStack.saveContext()
+        objSaveContext()
     }*/
 }

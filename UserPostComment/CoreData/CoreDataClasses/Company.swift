@@ -17,6 +17,6 @@ class Company: NSManagedObject {
         item.name = company[JsonResponseKeys.Name] as? String
         item.catchPhrase = company[JsonResponseKeys.CatchPhrase] as? String
         item.bs = company[JsonResponseKeys.Bs] as? String
-        appDelegate().coreDataStack.saveContext()
+        objSaveContext()
     }*/
 }

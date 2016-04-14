@@ -20,6 +20,6 @@ class Address: NSManagedObject {
         item.zipcode = address[JsonResponseKeys.ZipCode] as? String
         let geo = address[JsonResponseKeys.Geo] as? [String: AnyObject]
         Geo.insert(geo!)
-        appDelegate().coreDataStack.saveContext()
+        objSaveContext()
     }*/
 }

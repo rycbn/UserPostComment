@@ -25,6 +25,6 @@ class Post: NSManagedObject {
             item.title = post[JsonResponseKeys.Title] as? String
             item.body = post[JsonResponseKeys.Body] as? String
         }
-        appDelegate().coreDataStack.saveContext()
+        objSaveContext()
     }
 }
