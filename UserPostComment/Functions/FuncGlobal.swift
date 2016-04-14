@@ -19,7 +19,6 @@ func objContext() -> NSManagedObjectContext {
 func objSaveContext(){
     appDelegate().coreDataStack.saveContext()
 }
-
 func zoomToUserLocationInMapView(mapView: MKMapView) {
     if let coordinate = mapView.userLocation.location?.coordinate {
         let region = MKCoordinateRegionMakeWithDistance(coordinate, 100, 100)
