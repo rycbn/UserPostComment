@@ -23,4 +23,6 @@ struct Translation {
     static let Phone = "Phone"
     static let Website = "Website"
     static let Email = "Email"
+    static let Sorry = "Sorry"
+    static let UserInformationNotAvailable = "User information not available. please try again"
 }

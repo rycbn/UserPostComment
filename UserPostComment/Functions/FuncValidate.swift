@@ -25,9 +25,9 @@ func isReachableViaWifi() -> Bool {
     return reachability!.isReachableViaWiFi()
 }
 func isZeroDataCount() -> Bool {
-    let userCount = CoreDataOperation.objectCountForEntity(EntityName.User, context: context())
-    let postCount = CoreDataOperation.objectCountForEntity(EntityName.Post, context: context())
-    let commentCount = CoreDataOperation.objectCountForEntity(EntityName.Comment, context: context())
+    let userCount = CoreDataOperation.objectCountForEntity(EntityName.User, context: objContext())
+    let postCount = CoreDataOperation.objectCountForEntity(EntityName.Post, context: objContext())
+    let commentCount = CoreDataOperation.objectCountForEntity(EntityName.Comment, context: objContext())
     if userCount == 0 && postCount == 0 && commentCount  == 0 {
         return true
     }

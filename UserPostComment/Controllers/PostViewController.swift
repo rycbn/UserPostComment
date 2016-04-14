@@ -122,22 +122,14 @@ extension PostViewController: UITableViewDataSource {
                         if let image = UIImage(data: imageData!) {
                             dispatch_async(dispatch_get_main_queue(), {
                                 cell.imageView?.image = image
-                                let transition = CATransition()
-                                transition.duration = 1.0
-                                transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
-                                transition.type = kCATransitionFade
-                                transition.delegate = self
-                                cell.imageView?.layer.addAnimation(transition, forKey: nil)
+                                cell.imageView?.layer.addAnimation(imageTransition(), forKey: nil)
                             })
-                        }
-                        else {
-                            print(error)
                         }
                     })
                 }
             }
             cell.imageView?.contentMode = .ScaleAspectFill
-            cell.textLabel?.text = list.title!
+            cell.textLabel?.text = list.title ?? Translation.DataNotAvailable
             cell.textLabel?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightRegular)
             cell.textLabel?.textColor = UIColor.colorFromHexRGB(Color.SlateGray)
             cell.exclusiveTouch = true

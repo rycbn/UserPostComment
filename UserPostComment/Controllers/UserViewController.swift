@@ -103,24 +103,18 @@ extension UserViewController {
         imageView.image = userImage()
         imageView.contentMode = .ScaleAspectFill
         topView.addSubview(imageView)
-        let imageUrl = String(format: "https://api.adorable.io/avatars/40/%@@adorable.png", userInfo.username!)
-        if isNetworkOrCellularCoverageReachable() {
-            TaskConfig().taskForGETImage(imageUrl, completionHandler: { (imageData, error) in
-                if let image = UIImage(data: imageData!) {
-                    dispatch_async(dispatch_get_main_queue(), {
-                        imageView.image = image
-                        let transition = CATransition()
-                        transition.duration = 1.0
-                        transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
-                        transition.type = kCATransitionFade
-                        transition.delegate = self
-                        imageView.layer.addAnimation(transition, forKey: nil)
-                    })
-                }
-                else {
-                    print(error)
-                }
-            })
+        if let username = userInfo.username {
+            let imageUrl = String(format: "https://api.adorable.io/avatars/40/%@@adorable.png", username)
+            if isNetworkOrCellularCoverageReachable() {
+                TaskConfig().taskForGETImage(imageUrl, completionHandler: { (imageData, error) in
+                    if let image = UIImage(data: imageData!) {
+                        dispatch_async(dispatch_get_main_queue(), {
+                            imageView.image = image
+                            imageView.layer.addAnimation(imageTransition(), forKey: nil)
+                        })
+                    }
+                })
+            }
         }
         imageView.leadingAnchor.constraintEqualToAnchor(topView.leadingAnchor, constant: 20).active = true
         imageView.heightAnchor.constraintEqualToConstant(userImage().size.height).active = true
@@ -129,7 +123,7 @@ extension UserViewController {
 
         let nameLabel = UILabel()
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
-        nameLabel.text = userInfo.name!
+        nameLabel.text = userInfo.name ?? Translation.DataNotAvailable
         nameLabel.textColor = UIColor.colorFromHexRGB(Color.SlateGray)
         nameLabel.font = UIFont.systemFontOfSize(16, weight: UIFontWeightBold)
         topView.addSubview(nameLabel)
@@ -140,7 +134,7 @@ extension UserViewController {
         
         let usernameLabel = UILabel()
         usernameLabel.translatesAutoresizingMaskIntoConstraints = false
-        usernameLabel.text = String(format: "(%@)", userInfo.username!)
+        usernameLabel.text = String(format: "(%@)", userInfo.username ?? Translation.DataNotAvailable)
         usernameLabel.textColor = UIColor.colorFromHexRGB(Color.SlateGray)
         usernameLabel.font = UIFont.systemFontOfSize(14, weight: UIFontWeightSemibold)
         topView.addSubview(usernameLabel)
@@ -193,7 +187,7 @@ extension UserViewController {
         
         let suiteLabel = UILabel()
         suiteLabel.translatesAutoresizingMaskIntoConstraints = false
-        suiteLabel.text = userInfo.address?.suite!
+        suiteLabel.text = userInfo.address?.suite ?? Translation.DataNotAvailable
         suiteLabel.textColor = UIColor.colorFromHexRGB(Color.SlateGray)
         suiteLabel.font = UIFont.systemFontOfSize(14, weight: UIFontWeightRegular)
         addressView.addSubview(suiteLabel)
@@ -209,7 +203,7 @@ extension UserViewController {
         
         let streetLabel = UILabel()
         streetLabel.translatesAutoresizingMaskIntoConstraints = false
-        streetLabel.text = userInfo.address?.street!
+        streetLabel.text = userInfo.address?.street ?? Translation.DataNotAvailable
         streetLabel.textColor = UIColor.colorFromHexRGB(Color.SlateGray)
         streetLabel.font = UIFont.systemFontOfSize(14, weight: UIFontWeightRegular)
         addressView.addSubview(streetLabel)
@@ -225,7 +219,7 @@ extension UserViewController {
         
         let cityLabel = UILabel()
         cityLabel.translatesAutoresizingMaskIntoConstraints = false
-        cityLabel.text = userInfo.address?.city!
+        cityLabel.text = userInfo.address?.city ?? Translation.DataNotAvailable
         cityLabel.textColor = UIColor.colorFromHexRGB(Color.SlateGray)
         cityLabel.font = UIFont.systemFontOfSize(14, weight: UIFontWeightRegular)
         addressView.addSubview(cityLabel)
@@ -241,7 +235,7 @@ extension UserViewController {
         
         let zipcodeLabel = UILabel()
         zipcodeLabel.translatesAutoresizingMaskIntoConstraints = false
-        zipcodeLabel.text = userInfo.address?.zipcode!
+        zipcodeLabel.text = userInfo.address?.zipcode ?? Translation.DataNotAvailable
         zipcodeLabel.textColor = UIColor.colorFromHexRGB(Color.SlateGray)
         zipcodeLabel.font = UIFont.systemFontOfSize(14, weight: UIFontWeightRegular)
         addressView.addSubview(zipcodeLabel)
@@ -287,7 +281,7 @@ extension UserViewController {
         
         let nameLabel = UILabel()
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
-        nameLabel.text = userInfo.company?.name!
+        nameLabel.text = userInfo.company?.name ?? Translation.DataNotAvailable
         nameLabel.textColor = UIColor.colorFromHexRGB(Color.SlateGray)
         nameLabel.font = UIFont.systemFontOfSize(14, weight: UIFontWeightRegular)
         companyView.addSubview(nameLabel)
@@ -303,7 +297,7 @@ extension UserViewController {
         
         let catchPhraseLabel = UILabel()
         catchPhraseLabel.translatesAutoresizingMaskIntoConstraints = false
-        catchPhraseLabel.text = userInfo.company?.catchPhrase!
+        catchPhraseLabel.text = userInfo.company?.catchPhrase ?? Translation.DataNotAvailable
         catchPhraseLabel.textColor = UIColor.colorFromHexRGB(Color.SlateGray)
         catchPhraseLabel.font = UIFont.systemFontOfSize(14, weight: UIFontWeightRegular)
         companyView.addSubview(catchPhraseLabel)
@@ -319,7 +313,7 @@ extension UserViewController {
         
         let bsLabel = UILabel()
         bsLabel.translatesAutoresizingMaskIntoConstraints = false
-        bsLabel.text = userInfo.company?.bs!
+        bsLabel.text = userInfo.company?.bs ?? Translation.DataNotAvailable
         bsLabel.textColor = UIColor.colorFromHexRGB(Color.SlateGray)
         bsLabel.font = UIFont.systemFontOfSize(14, weight: UIFontWeightRegular)
         companyView.addSubview(bsLabel)
@@ -382,7 +376,7 @@ extension UserViewController {
         
         let phoneTextView = UITextView()
         phoneTextView.translatesAutoresizingMaskIntoConstraints = false
-        phoneTextView.text = userInfo.phone!
+        phoneTextView.text = userInfo.phone ?? Translation.DataNotAvailable
         phoneTextView.scrollEnabled = false
         phoneTextView.editable = false
         phoneTextView.textAlignment = .Right
@@ -416,7 +410,7 @@ extension UserViewController {
 
         let emailTextView = UITextView()
         emailTextView.translatesAutoresizingMaskIntoConstraints = false
-        emailTextView.text = userInfo.email!
+        emailTextView.text = userInfo.email ?? Translation.DataNotAvailable
         emailTextView.scrollEnabled = false
         emailTextView.editable = false
         emailTextView.textAlignment = .Right
@@ -451,7 +445,7 @@ extension UserViewController {
         
         let websiteTextView = UITextView()
         websiteTextView.translatesAutoresizingMaskIntoConstraints = false
-        websiteTextView.text = userInfo.website!
+        websiteTextView.text = userInfo.website ?? Translation.DataNotAvailable
         websiteTextView.scrollEnabled = false
         websiteTextView.editable = false
         websiteTextView.textAlignment = .Right
@@ -488,8 +482,8 @@ extension UserViewController: CLLocationManagerDelegate {
         }
     }
     func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        let latitude = userInfo.address!.geo!.latitude! //51.5158626
-        let longitude = userInfo.address!.geo!.longitude! //-0.0798606
+        let latitude = userInfo.address?.geo?.latitude ?? "51.5158626"
+        let longitude = userInfo.address?.geo?.longitude ?? "-0.0798606"
         let coordinate = CLLocationCoordinate2D(latitude: Double(latitude)!, longitude: Double(longitude)!)
         zoomToLocationInMapView(mapView, coordinate: coordinate)
     }

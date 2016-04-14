@@ -14,21 +14,21 @@ class User: NSManagedObject {
     class func getUserInfo(userId: Int) -> User {
         var item: User!
         let predicate = NSPredicate(format: "id = %li", userId)
-        let items = CoreDataOperation.objectsForEntity(EntityName.User, context: context(), filter: predicate, sort: nil) as! [User]
+        let items = CoreDataOperation.objectsForEntity(EntityName.User, context: objContext(), filter: predicate, sort: nil) as! [User]
         item = items.first!
         return item
     }
     // MARK:- INSERT
     class func insert(users: [AnyObject]) {
-        let entityUser = NSEntityDescription.entityForName(EntityName.User, inManagedObjectContext: context())
-        let entityAddress = NSEntityDescription.entityForName(EntityName.Address, inManagedObjectContext: context())
-        let entityCompany = NSEntityDescription.entityForName(EntityName.Company, inManagedObjectContext: context())
-        let entityGeo = NSEntityDescription.entityForName(EntityName.Geo, inManagedObjectContext: context())
+        let entityUser = NSEntityDescription.entityForName(EntityName.User, inManagedObjectContext: objContext())
+        let entityAddress = NSEntityDescription.entityForName(EntityName.Address, inManagedObjectContext: objContext())
+        let entityCompany = NSEntityDescription.entityForName(EntityName.Company, inManagedObjectContext: objContext())
+        let entityGeo = NSEntityDescription.entityForName(EntityName.Geo, inManagedObjectContext: objContext())
         for user in users {
-            let item = User(entity: entityUser!, insertIntoManagedObjectContext: context())
-            let address = Address(entity: entityAddress!, insertIntoManagedObjectContext: context())
-            let company = Company(entity: entityCompany!, insertIntoManagedObjectContext: context())
-            let geo = Geo(entity: entityGeo!, insertIntoManagedObjectContext: context())
+            let item = User(entity: entityUser!, insertIntoManagedObjectContext: objContext())
+            let address = Address(entity: entityAddress!, insertIntoManagedObjectContext: objContext())
+            let company = Company(entity: entityCompany!, insertIntoManagedObjectContext: objContext())
+            let geo = Geo(entity: entityGeo!, insertIntoManagedObjectContext: objContext())
 
             // Address
             let adds = user[JsonResponseKeys.Address] as? [String: AnyObject]

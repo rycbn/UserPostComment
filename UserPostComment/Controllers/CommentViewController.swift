@@ -112,28 +112,22 @@ extension CommentViewController: UITableViewDataSource {
         cell.imageView?.tintColor = UIColor.colorFromHexRGB(Color.SlateGray)
         if isNetworkOrCellularCoverageReachable() {
             let list = tableData[indexPath.row]
-            let username = list.email?.componentsSeparatedByString("@").first
-            let imageUrl = String(format: "https://api.adorable.io/avatars/40/%@@adorable.png", username!)
-            if isNetworkOrCellularCoverageReachable() {
-                TaskConfig().taskForGETImage(imageUrl, completionHandler: { (imageData, error) in
-                    if let image = UIImage(data: imageData!) {
-                        dispatch_async(dispatch_get_main_queue(), {
-                            cell.imageView?.image = image
-                            let transition = CATransition()
-                            transition.duration = 1.0
-                            transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
-                            transition.type = kCATransitionFade
-                            transition.delegate = self
-                            cell.imageView?.layer.addAnimation(transition, forKey: nil)
-                        })
-                    }
-                    else {
-                        print(error)
-                    }
-                })
+            if let email = list.email {
+                let username = email.componentsSeparatedByString("@").first
+                let imageUrl = String(format: "https://api.adorable.io/avatars/40/%@@adorable.png", username!)
+                if isNetworkOrCellularCoverageReachable() {
+                    TaskConfig().taskForGETImage(imageUrl, completionHandler: { (imageData, error) in
+                        if let image = UIImage(data: imageData!) {
+                            dispatch_async(dispatch_get_main_queue(), {
+                                cell.imageView?.image = image
+                                cell.imageView?.layer.addAnimation(imageTransition(), forKey: nil)
+                            })
+                        }
+                    })
+                }
             }
             cell.imageView?.contentMode = .ScaleAspectFill
-            cell.textLabel?.text = list.body!
+            cell.textLabel?.text = list.body ?? Translation.DataNotAvailable
             cell.textLabel?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightRegular)
             cell.textLabel?.textColor = UIColor.colorFromHexRGB(Color.SlateGray)
             cell.exclusiveTouch = true

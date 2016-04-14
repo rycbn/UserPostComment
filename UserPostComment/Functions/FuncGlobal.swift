@@ -13,7 +13,7 @@ import CoreData
 func appDelegate() -> AppDelegate {
     return UIApplication.sharedApplication().delegate as! AppDelegate
 }
-func context() -> NSManagedObjectContext {
+func objContext() -> NSManagedObjectContext {
     return appDelegate().coreDataStack.context
 }
 func zoomToUserLocationInMapView(mapView: MKMapView) {
@@ -25,4 +25,11 @@ func zoomToUserLocationInMapView(mapView: MKMapView) {
 func zoomToLocationInMapView(mapView: MKMapView, coordinate: CLLocationCoordinate2D) {
     let region = MKCoordinateRegionMakeWithDistance(coordinate, 100, 100)
     mapView.setRegion(region, animated: true)
+}
+func imageTransition() -> CATransition {
+    let transition = CATransition()
+    transition.duration = 1.0
+    transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
+    transition.type = kCATransitionFade
+    return transition
 }

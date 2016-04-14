@@ -12,7 +12,7 @@ import CoreData
 class Address: NSManagedObject {
     // MARK:- INSERT
     /*class func insert(address: [String: AnyObject]) {
-        let entity = NSEntityDescription.entityForName(EntityName.Address, inManagedObjectContext: context())
+        let entity = NSEntityDescription.entityForName(EntityName.Address, inManagedObjectContext: objContext())
         let item = Address(entity: entity!, insertIntoManagedObjectContext: context)
         item.street = address[JsonResponseKeys.Street] as? String
         item.suite = address[JsonResponseKeys.Suite] as? String

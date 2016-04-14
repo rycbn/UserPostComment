@@ -12,7 +12,7 @@ import CoreData
 class Company: NSManagedObject {
     // MARK:- INSERT
     /*class func insert(company: [String: AnyObject]) {
-        let entity = NSEntityDescription.entityForName(EntityName.Company, inManagedObjectContext: context())
+        let entity = NSEntityDescription.entityForName(EntityName.Company, inManagedObjectContext: objContext())
         let item = Company(entity: entity!, insertIntoManagedObjectContext: context)
         item.name = company[JsonResponseKeys.Name] as? String
         item.catchPhrase = company[JsonResponseKeys.CatchPhrase] as? String

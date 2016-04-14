@@ -90,16 +90,8 @@ extension PostDetailViewController {
                     if let image = UIImage(data: imageData!) {
                         dispatch_async(dispatch_get_main_queue(), {
                             imageView.image = image
-                            let transition = CATransition()
-                            transition.duration = 1.0
-                            transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
-                            transition.type = kCATransitionFade
-                            transition.delegate = self
-                            imageView.layer.addAnimation(transition, forKey: nil)
+                            imageView.layer.addAnimation(imageTransition(), forKey: nil)
                         })
-                    }
-                    else {
-                        print(error)
                     }
                 })
             }
@@ -110,10 +102,12 @@ extension PostDetailViewController {
         imageView.widthAnchor.constraintEqualToAnchor(imageView.heightAnchor).active = true
         imageView.centerYAnchor.constraintEqualToAnchor(topView.centerYAnchor).active = true
         
+        let username = postlist.username ?? Translation.DataNotAvailable
+        
         let usernameButton = UIButton(type: .Custom)
         usernameButton.translatesAutoresizingMaskIntoConstraints = false
-        usernameButton.setTitle(postlist.username!, forState: .Normal)
-        usernameButton.setTitle(postlist.username!, forState: .Highlighted)
+        usernameButton.setTitle(username, forState: .Normal)
+        usernameButton.setTitle(username, forState: .Highlighted)
         usernameButton.setTitleColor(UIColor.colorFromHexRGB(Color.Blue), forState: .Normal)
         usernameButton.setTitleColor(UIColor.colorFromHexRGB(Color.SlateGray), forState: .Highlighted)
         usernameButton.titleLabel?.font = UIFont.systemFontOfSize(18, weight: UIFontWeightBold)
@@ -136,7 +130,7 @@ extension PostDetailViewController {
         
         let titleLabel = UILabel()
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.text = postlist.title!
+        titleLabel.text = postlist.title ?? Translation.DataNotAvailable
         titleLabel.textColor = UIColor.colorFromHexRGB(Color.SlateGray)
         titleLabel.font = UIFont.systemFontOfSize(16, weight: UIFontWeightSemibold)
         titleLabel.numberOfLines = 0
@@ -167,7 +161,7 @@ extension PostDetailViewController {
         
         let bodyLabel = UILabel()
         bodyLabel.translatesAutoresizingMaskIntoConstraints = false
-        bodyLabel.text = postlist.body!
+        bodyLabel.text = postlist.body ?? Translation.DataNotAvailable
         bodyLabel.textColor = UIColor.colorFromHexRGB(Color.SlateGray)
         bodyLabel.font = UIFont.systemFontOfSize(16, weight: UIFontWeightRegular)
         bodyLabel.numberOfLines = 0
@@ -240,26 +234,29 @@ extension PostDetailViewController {
         navigationController?.popViewControllerAnimated(true)
     }
     func gotoUserInfo(sender: UIButton) {
-        let pushVC = UIStoryboard.userViewController() as UserViewController!
-        pushVC.userId = postlist.userId!
-        navigationController?.pushViewController(pushVC, animated: true)
+        if let userId = postlist.userId {
+            let pushVC = UIStoryboard.userViewController() as UserViewController!
+            pushVC.userId = userId
+            navigationController?.pushViewController(pushVC, animated: true)
+        }
+        else {
+            displayAlertWithTitle(Translation.Sorry, message: Translation.UserInformationNotAvailable, viewController: self)
+        }
     }
     func gotoComments(sender: UIButton) {
-        parentViewController!.view.alpha = 0.5
-        
+        parentViewController?.view.alpha = 0.5
         let presentVC = UIStoryboard.commentViewController() as CommentViewController!
         presentVC.modalPresentationStyle = .Custom
         presentVC.transitioningDelegate = self
         presentVC.tableData = comments
         presentVC.delegate = self
-        
         presentViewController(presentVC, animated: true, completion: nil)
     }
 }
 // MARK:- CommentViewControllerDelegate
 extension PostDetailViewController: CommentViewControllerDelegate {
     func removeBackgroundView() {
-        parentViewController!.view.alpha = 1.0
+        parentViewController?.view.alpha = 1.0
     }
 }
 // MARK:- UIViewControllerTransitioningDelegate
