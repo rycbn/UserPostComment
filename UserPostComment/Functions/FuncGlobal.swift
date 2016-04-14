@@ -29,10 +29,3 @@ func zoomToLocationInMapView(mapView: MKMapView, coordinate: CLLocationCoordinat
     let region = MKCoordinateRegionMakeWithDistance(coordinate, 100, 100)
     mapView.setRegion(region, animated: true)
 }
-func imageTransition() -> CATransition {
-    let transition = CATransition()
-    transition.duration = 1.0
-    transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
-    transition.type = kCATransitionFade
-    return transition
-}
