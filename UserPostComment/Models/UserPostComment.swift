@@ -18,33 +18,33 @@ class UserPostComment: NSObject {
     
     func getUserFromApi() {
         TaskConfig().getUserData({ (results, error) in
-            if results == nil {
-                self.delegate.apiError()
+            if let results = results {
+                User.insert(results)
+                self.getPostFromApi()
             }
             else {
-                User.insert(results!)
-                self.getPostFromApi()
+                self.delegate.apiError()
             }
         })
     }
     func getPostFromApi() {
         TaskConfig().getPostData({ (results, error) in
-            if results == nil {
-                self.delegate.apiError()
+            if let results = results {
+                Post.insert(results)
+                self.getCommentFromApi()
             }
             else {
-                Post.insert(results!)
-                self.getCommentFromApi()
+                self.delegate.apiError()
             }
         })
     }
     func getCommentFromApi() {
         TaskConfig().getCommentData({ (results, error) in
-            if results == nil {
-                self.delegate.apiError()
+            if let results = results {
+                Comment.insert(results)
             }
             else {
-                Comment.insert(results!)
+                self.delegate.apiError()
             }
         })
     }

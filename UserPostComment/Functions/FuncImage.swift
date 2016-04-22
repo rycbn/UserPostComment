@@ -8,33 +8,47 @@
 
 import UIKit
 
-func messageImage() -> UIImage {
-    let image = UIImage(named: ImageName.Message)!.imageWithRenderingMode(.AlwaysTemplate)
-    return image
+func messageImage() -> UIImage? {
+    if let image = UIImage(named: ImageName.Message)?.imageWithRenderingMode(.AlwaysTemplate) {
+        return image
+    }
+    return nil
 }
-func backImage() -> UIImage {
-    let image = UIImage(named: ImageName.Back)!.imageWithRenderingMode(.AlwaysTemplate)
-    return image
+func backImage() -> UIImage? {
+    if let image = UIImage(named: ImageName.Back)?.imageWithRenderingMode(.AlwaysTemplate) {
+        return image
+    }
+    return nil
 }
-func closeImage() -> UIImage {
-    let image = UIImage(named: ImageName.Close)!.imageWithRenderingMode(.AlwaysTemplate)
-    return image
+func closeImage() -> UIImage? {
+    if let image = UIImage(named: ImageName.Close)?.imageWithRenderingMode(.AlwaysTemplate) {
+        return image
+    }
+    return nil
 }
-func userImage() -> UIImage {
-    let image = UIImage(named: ImageName.User)!.imageWithRenderingMode(.AlwaysTemplate)
-    return image
+func userImage() -> UIImage? {
+    if let image = UIImage(named: ImageName.User)?.imageWithRenderingMode(.AlwaysTemplate) {
+        return image
+    }
+    return nil
 }
-func phoneImage() -> UIImage {
-    let image = UIImage(named: ImageName.Phone)!.imageWithRenderingMode(.AlwaysTemplate)
-    return image
+func phoneImage() -> UIImage? {
+    if let image = UIImage(named: ImageName.Phone)?.imageWithRenderingMode(.AlwaysTemplate) {
+        return image
+    }
+    return nil
 }
-func emailImage() -> UIImage {
-    let image = UIImage(named: ImageName.Email)!.imageWithRenderingMode(.AlwaysTemplate)
-    return image
+func emailImage() -> UIImage? {
+    if let image = UIImage(named: ImageName.Email)?.imageWithRenderingMode(.AlwaysTemplate) {
+        return image
+    }
+    return nil
 }
-func websiteImage() -> UIImage {
-    let image = UIImage(named: ImageName.Website)!.imageWithRenderingMode(.AlwaysTemplate)
-    return image
+func websiteImage() -> UIImage? {
+    if let image = UIImage(named: ImageName.Website)?.imageWithRenderingMode(.AlwaysTemplate) {
+        return image
+    }
+    return nil
 }
 func imageTransition() -> CATransition {
     let transition = CATransition()

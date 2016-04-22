@@ -13,6 +13,7 @@
 		5E3A878D1CB6A2A900656740 /* CommentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E3A878C1CB6A2A900656740 /* CommentViewController.swift */; };
 		5E3A878F1CB6CFCA00656740 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E3A878E1CB6CFCA00656740 /* MapKit.framework */; };
 		5E3A87911CB7C95A00656740 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E3A87901CB7C95A00656740 /* Location.swift */; };
+		5E5C70841CCA7693009E6E7F /* ExtString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E5C70831CCA7693009E6E7F /* ExtString.swift */; };
 		5E730D9D1CB3B3060054A493 /* UserPostComment.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5E730D9B1CB3B3060054A493 /* UserPostComment.xcdatamodeld */; };
 		5E730DAA1CB3BD610054A493 /* Post+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E730D9E1CB3BD610054A493 /* Post+CoreDataProperties.swift */; };
 		5E730DAB1CB3BD610054A493 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E730D9F1CB3BD610054A493 /* Post.swift */; };
@@ -60,6 +61,7 @@
 		5E3A878C1CB6A2A900656740 /* CommentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentViewController.swift; sourceTree = "<group>"; };
 		5E3A878E1CB6CFCA00656740 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		5E3A87901CB7C95A00656740 /* Location.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
+		5E5C70831CCA7693009E6E7F /* ExtString.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtString.swift; sourceTree = "<group>"; };
 		5E730D9C1CB3B3060054A493 /* UserPostComment.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = UserPostComment.xcdatamodel; sourceTree = "<group>"; };
 		5E730D9E1CB3BD610054A493 /* Post+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Post+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		5E730D9F1CB3BD610054A493 /* Post.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
@@ -259,6 +261,7 @@
 				5E730DD91CB40D2F0054A493 /* ExtStoryboard.swift */,
 				5E730DDB1CB40D4E0054A493 /* ExtColor.swift */,
 				5E3A87841CB66A4200656740 /* ExtFont.swift */,
+				5E5C70831CCA7693009E6E7F /* ExtString.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -405,6 +408,7 @@
 				5E730DB11CB3BD610054A493 /* User.swift in Sources */,
 				5E730DB51CB3BD610054A493 /* Geo.swift in Sources */,
 				5E730DE51CB424490054A493 /* FuncBarButton.swift in Sources */,
+				5E5C70841CCA7693009E6E7F /* ExtString.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -17,6 +17,8 @@ struct Translation {
     static let ApiErrorTitle = "API Error"
     static let ApiErrorMessage = "API connection issue, please try again"
     static let UserInformation = "User Information"
+    static let UserPost = "User Post"
+    static let UserPostDetail = "User Post Details"
     static let Address = "Address"
     static let Company = "Company"
     static let Contact = "Contact"

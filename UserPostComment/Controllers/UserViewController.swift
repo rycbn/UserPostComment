@@ -107,17 +107,20 @@ extension UserViewController {
             let imageUrl = String(format: "https://api.adorable.io/avatars/40/%@@adorable.png", username)
             if isNetworkOrCellularCoverageReachable() {
                 TaskConfig().taskForGETImage(imageUrl, completionHandler: { (imageData, error) in
-                    if let image = UIImage(data: imageData!) {
-                        dispatch_async(dispatch_get_main_queue(), {
-                            imageView.image = image
-                            imageView.layer.addAnimation(imageTransition(), forKey: nil)
-                        })
+                    if let imageData = imageData {
+                        if let image = UIImage(data: imageData) {
+                            dispatch_async(dispatch_get_main_queue(), {
+                                imageView.image = image
+                                imageView.layer.addAnimation(imageTransition(), forKey: nil)
+                            })
+                        }
                     }
                 })
             }
         }
+        let userImageHeight = userImage()?.size.height ?? 40
         imageView.leadingAnchor.constraintEqualToAnchor(topView.leadingAnchor, constant: 20).active = true
-        imageView.heightAnchor.constraintEqualToConstant(userImage().size.height).active = true
+        imageView.heightAnchor.constraintEqualToConstant(userImageHeight).active = true
         imageView.widthAnchor.constraintEqualToAnchor(imageView.heightAnchor).active = true
         imageView.centerYAnchor.constraintEqualToAnchor(topView.centerYAnchor).active = true
 
@@ -185,14 +188,16 @@ extension UserViewController {
         
         var addressViewHeight = 0 as CGFloat
         
+        let suiteText = userInfo.address?.suite ?? Translation.DataNotAvailable
+        
         let suiteLabel = UILabel()
         suiteLabel.translatesAutoresizingMaskIntoConstraints = false
-        suiteLabel.text = userInfo.address?.suite ?? Translation.DataNotAvailable
+        suiteLabel.text = suiteText
         suiteLabel.textColor = UIColor.colorFromHexRGB(Color.SlateGray)
         suiteLabel.font = UIFont.systemFontOfSize(14, weight: UIFontWeightRegular)
         addressView.addSubview(suiteLabel)
         
-        let expectFrameSuiteLabel = suiteLabel.font.sizeOfString(suiteLabel.text!, constrainedToWidth: labelWidth)
+        let expectFrameSuiteLabel = suiteLabel.font.sizeOfString(suiteText, constrainedToWidth: labelWidth)
         
         suiteLabel.topAnchor.constraintEqualToAnchor(addressView.topAnchor, constant: 5).active = true
         suiteLabel.leadingAnchor.constraintEqualToAnchor(addressView.leadingAnchor, constant: 20).active = true
@@ -201,14 +206,16 @@ extension UserViewController {
         
         addressViewHeight = addressViewHeight + expectFrameSuiteLabel.height + 5
         
+        let streetText = userInfo.address?.street ?? Translation.DataNotAvailable
+        
         let streetLabel = UILabel()
         streetLabel.translatesAutoresizingMaskIntoConstraints = false
-        streetLabel.text = userInfo.address?.street ?? Translation.DataNotAvailable
+        streetLabel.text = streetText
         streetLabel.textColor = UIColor.colorFromHexRGB(Color.SlateGray)
         streetLabel.font = UIFont.systemFontOfSize(14, weight: UIFontWeightRegular)
         addressView.addSubview(streetLabel)
         
-        let expectFrameStreetLabel = streetLabel.font.sizeOfString(streetLabel.text!, constrainedToWidth: labelWidth)
+        let expectFrameStreetLabel = streetLabel.font.sizeOfString(streetText, constrainedToWidth: labelWidth)
         
         streetLabel.topAnchor.constraintEqualToAnchor(suiteLabel.bottomAnchor, constant: 2).active = true
         streetLabel.leadingAnchor.constraintEqualToAnchor(addressView.leadingAnchor, constant: 20).active = true
@@ -217,14 +224,16 @@ extension UserViewController {
         
         addressViewHeight = addressViewHeight + expectFrameStreetLabel.height + 2
         
+        let cityText = userInfo.address?.city ?? Translation.DataNotAvailable
+        
         let cityLabel = UILabel()
         cityLabel.translatesAutoresizingMaskIntoConstraints = false
-        cityLabel.text = userInfo.address?.city ?? Translation.DataNotAvailable
+        cityLabel.text = cityText
         cityLabel.textColor = UIColor.colorFromHexRGB(Color.SlateGray)
         cityLabel.font = UIFont.systemFontOfSize(14, weight: UIFontWeightRegular)
         addressView.addSubview(cityLabel)
         
-        let expectFrameCityLabel = cityLabel.font.sizeOfString(cityLabel.text!, constrainedToWidth: labelWidth)
+        let expectFrameCityLabel = cityLabel.font.sizeOfString(cityText, constrainedToWidth: labelWidth)
         
         cityLabel.topAnchor.constraintEqualToAnchor(streetLabel.bottomAnchor, constant: 2).active = true
         cityLabel.leadingAnchor.constraintEqualToAnchor(addressView.leadingAnchor, constant: 20).active = true
@@ -233,14 +242,16 @@ extension UserViewController {
 
         addressViewHeight = addressViewHeight + expectFrameCityLabel.height + 2
         
+        let zipcodeText = userInfo.address?.zipcode ?? Translation.DataNotAvailable
+        
         let zipcodeLabel = UILabel()
         zipcodeLabel.translatesAutoresizingMaskIntoConstraints = false
-        zipcodeLabel.text = userInfo.address?.zipcode ?? Translation.DataNotAvailable
+        zipcodeLabel.text = zipcodeText
         zipcodeLabel.textColor = UIColor.colorFromHexRGB(Color.SlateGray)
         zipcodeLabel.font = UIFont.systemFontOfSize(14, weight: UIFontWeightRegular)
         addressView.addSubview(zipcodeLabel)
         
-        let expectFrameZipcodeLabel = zipcodeLabel.font.sizeOfString(zipcodeLabel.text!, constrainedToWidth: labelWidth)
+        let expectFrameZipcodeLabel = zipcodeLabel.font.sizeOfString(zipcodeText, constrainedToWidth: labelWidth)
         
         zipcodeLabel.topAnchor.constraintEqualToAnchor(cityLabel.bottomAnchor, constant: 2).active = true
         zipcodeLabel.leadingAnchor.constraintEqualToAnchor(addressView.leadingAnchor, constant: 20).active = true
@@ -279,14 +290,16 @@ extension UserViewController {
         
         var companyViewHeight = 0 as CGFloat
         
+        let nameText = userInfo.company?.name ?? Translation.DataNotAvailable
+        
         let nameLabel = UILabel()
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
-        nameLabel.text = userInfo.company?.name ?? Translation.DataNotAvailable
+        nameLabel.text = nameText
         nameLabel.textColor = UIColor.colorFromHexRGB(Color.SlateGray)
         nameLabel.font = UIFont.systemFontOfSize(14, weight: UIFontWeightRegular)
         companyView.addSubview(nameLabel)
         
-        let expectFrameNameLabel = nameLabel.font.sizeOfString(nameLabel.text!, constrainedToWidth: labelWidth)
+        let expectFrameNameLabel = nameLabel.font.sizeOfString(nameText, constrainedToWidth: labelWidth)
         
         nameLabel.topAnchor.constraintEqualToAnchor(companyView.topAnchor, constant: 5).active = true
         nameLabel.leadingAnchor.constraintEqualToAnchor(companyView.leadingAnchor, constant: 20).active = true
@@ -295,14 +308,16 @@ extension UserViewController {
         
         companyViewHeight = companyViewHeight + expectFrameNameLabel.height + 5
         
+        let catchPhraseText = userInfo.company?.catchPhrase ?? Translation.DataNotAvailable
+        
         let catchPhraseLabel = UILabel()
         catchPhraseLabel.translatesAutoresizingMaskIntoConstraints = false
-        catchPhraseLabel.text = userInfo.company?.catchPhrase ?? Translation.DataNotAvailable
+        catchPhraseLabel.text = catchPhraseText
         catchPhraseLabel.textColor = UIColor.colorFromHexRGB(Color.SlateGray)
         catchPhraseLabel.font = UIFont.systemFontOfSize(14, weight: UIFontWeightRegular)
         companyView.addSubview(catchPhraseLabel)
         
-        let expectFrameCatchPhraseLabel = catchPhraseLabel.font.sizeOfString(catchPhraseLabel.text!, constrainedToWidth: labelWidth)
+        let expectFrameCatchPhraseLabel = catchPhraseLabel.font.sizeOfString(catchPhraseText, constrainedToWidth: labelWidth)
         
         catchPhraseLabel.topAnchor.constraintEqualToAnchor(nameLabel.bottomAnchor, constant: 2).active = true
         catchPhraseLabel.leadingAnchor.constraintEqualToAnchor(companyView.leadingAnchor, constant: 20).active = true
@@ -311,14 +326,16 @@ extension UserViewController {
         
         companyViewHeight = companyViewHeight + expectFrameCatchPhraseLabel.height + 2
         
+        let bsText = userInfo.company?.bs ?? Translation.DataNotAvailable
+        
         let bsLabel = UILabel()
         bsLabel.translatesAutoresizingMaskIntoConstraints = false
-        bsLabel.text = userInfo.company?.bs ?? Translation.DataNotAvailable
+        bsLabel.text = bsText
         bsLabel.textColor = UIColor.colorFromHexRGB(Color.SlateGray)
         bsLabel.font = UIFont.systemFontOfSize(14, weight: UIFontWeightRegular)
         companyView.addSubview(bsLabel)
         
-        let expectFrameBsLabel = bsLabel.font.sizeOfString(bsLabel.text!, constrainedToWidth: labelWidth)
+        let expectFrameBsLabel = bsLabel.font.sizeOfString(bsText, constrainedToWidth: labelWidth)
         
         bsLabel.topAnchor.constraintEqualToAnchor(catchPhraseLabel.bottomAnchor, constant: 2).active = true
         bsLabel.leadingAnchor.constraintEqualToAnchor(companyView.leadingAnchor, constant: 20).active = true
@@ -365,7 +382,7 @@ extension UserViewController {
         phoneLabel.lineBreakMode = .ByClipping
         contactView.addSubview(phoneLabel)
         
-        let expectFramePhoneLabel = phoneLabel.font.sizeOfString(phoneLabel.text!, constrainedToWidth: labelWidth)
+        let expectFramePhoneLabel = phoneLabel.font.sizeOfString(Translation.Phone, constrainedToWidth: labelWidth)
         
         phoneLabel.topAnchor.constraintEqualToAnchor(contactView.topAnchor, constant: 5).active = true
         phoneLabel.leadingAnchor.constraintEqualToAnchor(contactView.leadingAnchor, constant: 20).active = true
@@ -399,7 +416,7 @@ extension UserViewController {
         emailLabel.lineBreakMode = .ByClipping
         contactView.addSubview(emailLabel)
         
-        let expectFrameEmailLabel = emailLabel.font.sizeOfString(emailLabel.text!, constrainedToWidth: labelWidth)
+        let expectFrameEmailLabel = emailLabel.font.sizeOfString(Translation.Email, constrainedToWidth: labelWidth)
         
         emailLabel.topAnchor.constraintEqualToAnchor(phoneLabel.bottomAnchor, constant: 10).active = true
         emailLabel.leadingAnchor.constraintEqualToAnchor(contactView.leadingAnchor, constant: 20).active = true
@@ -433,7 +450,7 @@ extension UserViewController {
         websiteLabel.lineBreakMode = .ByClipping
         contactView.addSubview(websiteLabel)
         
-        let expectFrameWebsiteLabel = websiteLabel.font.sizeOfString(websiteLabel.text!, constrainedToWidth: labelWidth)
+        let expectFrameWebsiteLabel = websiteLabel.font.sizeOfString(Translation.Website, constrainedToWidth: labelWidth)
         
         websiteLabel.topAnchor.constraintEqualToAnchor(emailLabel.bottomAnchor, constant: 10).active = true
         websiteLabel.leadingAnchor.constraintEqualToAnchor(contactView.leadingAnchor, constant: 20).active = true
@@ -484,7 +501,7 @@ extension UserViewController: CLLocationManagerDelegate {
     func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         let latitude = userInfo.address?.geo?.latitude ?? "51.5158626"
         let longitude = userInfo.address?.geo?.longitude ?? "-0.0798606"
-        let coordinate = CLLocationCoordinate2D(latitude: Double(latitude)!, longitude: Double(longitude)!)
+        let coordinate = CLLocationCoordinate2D(latitude: latitude.toDouble(), longitude: longitude.toDouble())
         zoomToLocationInMapView(mapView, coordinate: coordinate)
     }
     func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {

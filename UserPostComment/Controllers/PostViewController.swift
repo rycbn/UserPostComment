@@ -28,7 +28,7 @@ class PostViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.automaticallyAdjustsScrollViewInsets = false
-        title = Client.Name
+        title = Translation.UserPost
         
         configureData()
         configureTableView()
@@ -95,8 +95,10 @@ extension PostViewController {
         postList.getPostData()
     }
     func addSpinner() {
-        spinner.runSpinnerWithIndicator(parentViewController!.view)
-        spinner.start()
+        if let pvc = parentViewController?.view {
+            spinner.runSpinnerWithIndicator(pvc)
+            spinner.start()
+        }
     }
     func removeSpinner() {
         spinner.stop()
@@ -119,11 +121,13 @@ extension PostViewController: UITableViewDataSource {
             if let imageUrl = list.imageUrl {
                 if isNetworkOrCellularCoverageReachable() {
                     TaskConfig().taskForGETImage(imageUrl, completionHandler: { (imageData, error) in
-                        if let image = UIImage(data: imageData!) {
-                            dispatch_async(dispatch_get_main_queue(), {
-                                cell.imageView?.image = image
-                                cell.imageView?.layer.addAnimation(imageTransition(), forKey: nil)
-                            })
+                        if let imageData = imageData {
+                            if let image = UIImage(data: imageData) {
+                                dispatch_async(dispatch_get_main_queue(), {
+                                    cell.imageView?.image = image
+                                    cell.imageView?.layer.addAnimation(imageTransition(), forKey: nil)
+                                })
+                            }
                         }
                     })
                 }

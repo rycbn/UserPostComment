@@ -17,12 +17,16 @@ func hasCellularCoverage() -> Bool {
     return true
 }
 func isNetworkOrCellularCoverageReachable() -> Bool  {
-    let reachability = Reachability.reachabilityForInternetConnection()
-    return (reachability!.isReachable() || hasCellularCoverage())
+    if let reachability = Reachability.reachabilityForInternetConnection() {
+        return (reachability.isReachable() || hasCellularCoverage())
+    }
+    return false
 }
 func isReachableViaWifi() -> Bool {
-    let reachability = Reachability.reachabilityForInternetConnection()
-    return reachability!.isReachableViaWiFi()
+    if let reachability = Reachability.reachabilityForInternetConnection() {
+        return reachability.isReachableViaWiFi()
+    }
+    return false
 }
 func isZeroDataCount() -> Bool {
     let userCount = CoreDataOperation.objectCountForEntity(EntityName.User, context: objContext())

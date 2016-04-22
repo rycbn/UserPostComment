@@ -44,7 +44,7 @@ class PostDetailViewController: UIViewController {
 extension PostDetailViewController {
     func configureInit() {
         self.automaticallyAdjustsScrollViewInsets = false
-        title = Client.Name
+        title = Translation.UserPostDetail
         totalHeight = 0
         labelWidth = view.frame.width - (20*2)
     }
@@ -52,7 +52,9 @@ extension PostDetailViewController {
         navigationItem.leftBarButtonItem = backBarButtonItem(target: self)
     }
     func configureData() {
-        comments = Comment.getCommentInfo(Int(postlist.id!))
+        if let listId = postlist.id {
+            comments = Comment.getCommentInfo(Int(listId))
+        }
     }
     func configureScrollView() {
         scrollView = UIScrollView()
@@ -87,18 +89,20 @@ extension PostDetailViewController {
         if isNetworkOrCellularCoverageReachable() {
             if let imageUrl = postlist.imageUrl {
                 TaskConfig().taskForGETImage(imageUrl, completionHandler: { (imageData, error) in
-                    if let image = UIImage(data: imageData!) {
-                        dispatch_async(dispatch_get_main_queue(), {
-                            imageView.image = image
-                            imageView.layer.addAnimation(imageTransition(), forKey: nil)
-                        })
+                    if let imageData = imageData {
+                        if let image = UIImage(data: imageData) {
+                            dispatch_async(dispatch_get_main_queue(), {
+                                imageView.image = image
+                                imageView.layer.addAnimation(imageTransition(), forKey: nil)
+                            })
+                        }
                     }
                 })
             }
         }
-
+        let userImageHeight = userImage()?.size.height ?? 40
         imageView.leadingAnchor.constraintEqualToAnchor(topView.leadingAnchor, constant: 20).active = true
-        imageView.heightAnchor.constraintEqualToConstant(userImage().size.height).active = true
+        imageView.heightAnchor.constraintEqualToConstant(userImageHeight).active = true
         imageView.widthAnchor.constraintEqualToAnchor(imageView.heightAnchor).active = true
         imageView.centerYAnchor.constraintEqualToAnchor(topView.centerYAnchor).active = true
         
@@ -128,9 +132,11 @@ extension PostDetailViewController {
         
         var postInfoViewHeight = 0 as CGFloat
         
+        let titleText = postlist.title ?? Translation.DataNotAvailable
+        
         let titleLabel = UILabel()
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.text = postlist.title ?? Translation.DataNotAvailable
+        titleLabel.text = titleText
         titleLabel.textColor = UIColor.colorFromHexRGB(Color.SlateGray)
         titleLabel.font = UIFont.systemFontOfSize(16, weight: UIFontWeightSemibold)
         titleLabel.numberOfLines = 0
@@ -138,7 +144,7 @@ extension PostDetailViewController {
         titleLabel.adjustsFontSizeToFitWidth = true
         postInfoView.addSubview(titleLabel)
         
-        let expectFrameForTitleLabel = titleLabel.font.sizeOfString(titleLabel.text!, constrainedToWidth: labelWidth)
+        let expectFrameForTitleLabel = titleLabel.font.sizeOfString(titleText, constrainedToWidth: labelWidth)
 
         titleLabel.topAnchor.constraintEqualToAnchor(postInfoView.topAnchor, constant: 10).active = true
         titleLabel.widthAnchor.constraintEqualToConstant(labelWidth).active = true
@@ -159,9 +165,11 @@ extension PostDetailViewController {
         
         postInfoViewHeight = postInfoViewHeight + 1 + 3
         
+        let bodyText = postlist.body ?? Translation.DataNotAvailable
+        
         let bodyLabel = UILabel()
         bodyLabel.translatesAutoresizingMaskIntoConstraints = false
-        bodyLabel.text = postlist.body ?? Translation.DataNotAvailable
+        bodyLabel.text = bodyText
         bodyLabel.textColor = UIColor.colorFromHexRGB(Color.SlateGray)
         bodyLabel.font = UIFont.systemFontOfSize(16, weight: UIFontWeightRegular)
         bodyLabel.numberOfLines = 0
@@ -169,7 +177,7 @@ extension PostDetailViewController {
         bodyLabel.adjustsFontSizeToFitWidth = true
         postInfoView.addSubview(bodyLabel)
         
-        let expectFrameForBodyLabel = bodyLabel.font.sizeOfString(bodyLabel.text!, constrainedToWidth: labelWidth)
+        let expectFrameForBodyLabel = bodyLabel.font.sizeOfString(bodyText, constrainedToWidth: labelWidth)
         
         bodyLabel.topAnchor.constraintEqualToAnchor(underline.bottomAnchor, constant: 10).active = true
         bodyLabel.widthAnchor.constraintEqualToConstant(labelWidth).active = true
@@ -195,14 +203,16 @@ extension PostDetailViewController {
         commentInfoView.heightAnchor.constraintEqualToConstant(35).active = true
         commentInfoView.widthAnchor.constraintEqualToAnchor(scrollView.widthAnchor).active = true
         
+        let commentText = comments.count > 1 ? "COMMENTS :" : "COMMENT :"
+        
         let commentLabel = UILabel()
         commentLabel.translatesAutoresizingMaskIntoConstraints = false
-        commentLabel.text = comments.count > 1 ? "COMMENTS :" : "COMMENT :"
+        commentLabel.text = commentText
         commentLabel.textColor = UIColor.colorFromHexRGB(Color.SlateGray)
         commentLabel.font = UIFont.systemFontOfSize(16, weight: UIFontWeightSemibold)
         commentInfoView.addSubview(commentLabel)
         
-        let expectFrameForCommentLabel = commentLabel.font.sizeOfString(commentLabel.text!, constrainedToWidth: labelWidth)
+        let expectFrameForCommentLabel = commentLabel.font.sizeOfString(commentText, constrainedToWidth: labelWidth)
         
         commentLabel.leadingAnchor.constraintEqualToAnchor(commentInfoView.leadingAnchor, constant: 20).active = true
         commentLabel.heightAnchor.constraintEqualToConstant(expectFrameForCommentLabel.height).active = true
@@ -268,7 +278,12 @@ extension PostDetailViewController: UIViewControllerTransitioningDelegate {
 // MARK:- UIPresentationController
 class CenterPresentationController : UIPresentationController {
     override func frameOfPresentedViewInContainerView() -> CGRect {
-        let rect = CGRect(x: 0, y: containerView!.bounds.height/2, width: containerView!.bounds.width, height: containerView!.bounds.height/2)
+        var rect: CGRect!
+        if let containerView = containerView {
+            rect = CGRect(x: 0, y: containerView.bounds.height/2, width: containerView.bounds.width, height: containerView.bounds.height/2)
+        } else {
+            rect = CGRectZero
+        }
         return rect
     }
 }

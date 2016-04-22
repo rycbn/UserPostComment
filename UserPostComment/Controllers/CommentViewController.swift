@@ -49,8 +49,10 @@ extension CommentViewController {
         dismissButton.contentHorizontalAlignment = .Right
         topView.addSubview(dismissButton)
         
+        let closeImageHeight = closeImage()?.size.height ?? 50
+        
         topView.trailingAnchor.constraintEqualToAnchor(dismissButton.trailingAnchor, constant: 3).active = true
-        dismissButton.heightAnchor.constraintEqualToConstant(closeImage().size.height).active = true
+        dismissButton.heightAnchor.constraintEqualToConstant(closeImageHeight).active = true
         dismissButton.widthAnchor.constraintEqualToAnchor(dismissButton.heightAnchor, multiplier: 2).active = true
         dismissButton.centerYAnchor.constraintEqualToAnchor(topView.centerYAnchor).active = true
     
@@ -113,17 +115,20 @@ extension CommentViewController: UITableViewDataSource {
         if isNetworkOrCellularCoverageReachable() {
             let list = tableData[indexPath.row]
             if let email = list.email {
-                let username = email.componentsSeparatedByString("@").first
-                let imageUrl = String(format: "https://api.adorable.io/avatars/40/%@@adorable.png", username!)
-                if isNetworkOrCellularCoverageReachable() {
-                    TaskConfig().taskForGETImage(imageUrl, completionHandler: { (imageData, error) in
-                        if let image = UIImage(data: imageData!) {
-                            dispatch_async(dispatch_get_main_queue(), {
-                                cell.imageView?.image = image
-                                cell.imageView?.layer.addAnimation(imageTransition(), forKey: nil)
-                            })
-                        }
-                    })
+                if let username = email.componentsSeparatedByString("@").first {
+                    let imageUrl = String(format: "https://api.adorable.io/avatars/40/%@@adorable.png", username)
+                    if isNetworkOrCellularCoverageReachable() {
+                        TaskConfig().taskForGETImage(imageUrl, completionHandler: { (imageData, error) in
+                            if let imageData = imageData {
+                                if let image = UIImage(data: imageData) {
+                                    dispatch_async(dispatch_get_main_queue(), {
+                                        cell.imageView?.image = image
+                                        cell.imageView?.layer.addAnimation(imageTransition(), forKey: nil)
+                                    })
+                                }
+                            }
+                        })
+                    }
                 }
             }
             cell.imageView?.contentMode = .ScaleAspectFill
